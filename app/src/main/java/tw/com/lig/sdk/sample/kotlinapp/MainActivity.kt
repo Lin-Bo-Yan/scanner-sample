@@ -45,7 +45,8 @@ class MainActivity: Activity() {
             builder.append("Position: ${id.position.x}, ${id.position.y}, ${id.position.z} mm\n")
         }
 
-        builder.append("Version: ${LiGScanner.version}")
+        builder.append("Version: ${LiGScanner.version}\n")
+        builder.append("UUID: ${LiGScanner.getUUID()}")
         findViewById<TextView>(R.id.lightid_message).text = builder.toString()
     }
 
