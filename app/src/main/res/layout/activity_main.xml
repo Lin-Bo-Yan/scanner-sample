@@ -19,11 +19,13 @@
             android:layout_height="match_parent" />
 
         <TextView
-            android:text="1.0.4"
+            android:id="@+id/app_version"
+            android:text="0.0.0"
             android:textColor="@android:color/white"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="end|top"/>
+            android:layout_gravity="end|top"
+            android:padding="5dp" />
 
     </FrameLayout>
 

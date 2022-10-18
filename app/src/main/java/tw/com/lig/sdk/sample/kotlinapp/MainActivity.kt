@@ -3,6 +3,7 @@ package tw.com.lig.sdk.sample.kotlinapp
 import android.Manifest
 import android.app.Activity
 import android.os.Bundle
+import android.view.WindowManager
 import android.widget.TextView
 import tw.com.lig.sdk.scanner.LiGScanner
 import tw.com.lig.sdk.scanner.LightID
@@ -14,8 +15,7 @@ class MainActivity: Activity() {
     private val sLackPermissions = arrayOf(
         Manifest.permission.WRITE_EXTERNAL_STORAGE,
         Manifest.permission.CAMERA,
-        Manifest.permission.ACCESS_FINE_LOCATION,
-        Manifest.permission.READ_PHONE_STATE
+        Manifest.permission.ACCESS_FINE_LOCATION
     )
 
     private fun updateLightIDMessage(id: LightID) {
@@ -71,8 +71,12 @@ class MainActivity: Activity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+
         setContentView(R.layout.activity_main);
         surfaceView = findViewById(R.id.surface_view)
+        findViewById<TextView>(R.id.app_version).text = BuildConfig.VERSION_NAME
 
         // receive scanner status
         LiGScanner.setStatusListener { status ->
