@@ -11,7 +11,7 @@ android {
         minSdk 24
         targetSdk 32
         versionCode 1
-        versionName "1.0.5"
+        versionName "1.0.6"
     }
 
     compileOptions {
@@ -25,5 +25,10 @@ android {
 }
 
 dependencies {
-    implementation 'tw.com.lig:scanner:3.0.7'
+    implementation 'tw.com.lig:scanner:3.0.8'
+
+    // 3D Viewer
+    implementation 'com.google.ar:core:1.30.0'
+    implementation 'com.google.ar.sceneform:core:1.17.1'
+    implementation 'com.google.ar.sceneform:assets:1.17.1'
 }

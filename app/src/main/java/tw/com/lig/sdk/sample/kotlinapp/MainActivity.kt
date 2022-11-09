@@ -2,6 +2,7 @@ package tw.com.lig.sdk.sample.kotlinapp
 
 import android.Manifest
 import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.view.WindowManager
 import android.widget.TextView
@@ -11,6 +12,7 @@ import tw.com.lig.sdk.scanner.LightID
 class MainActivity: Activity() {
 
     private var surfaceView: LiGSurfaceView? = null
+    private var opened = false
 
     private val sLackPermissions = arrayOf(
         Manifest.permission.WRITE_EXTERNAL_STORAGE,
@@ -34,19 +36,16 @@ class MainActivity: Activity() {
         builder.append("Status: $status\n")
 
         if (id.isDetected) {
-            builder.append("Device ID: ${id.deviceId}\n")
             builder.append("Detection: ${id.detectionTime} ms\n")
             builder.append("Decoded: ${id.decodedTime} ms\n")
         }
 
         if (id.isReady) {
             builder.append("Rotation: ${id.rotation.x}, ${id.rotation.y}, ${id.rotation.z}\n")
-            builder.append("Translation: ${id.translation.x}, ${id.translation.y}, ${id.translation.z} mm\n")
-            builder.append("Position: ${id.position.x}, ${id.position.y}, ${id.position.z} mm\n")
+            builder.append("Translation: ${id.translation.x}, ${id.translation.y}, ${id.translation.z}\n")
+            builder.append("Position: ${id.position.x}, ${id.position.y}, ${id.position.z}\n")
         }
 
-        builder.append("Version: ${LiGScanner.version}\n")
-        builder.append("UUID: ${LiGScanner.getUUID()}")
         findViewById<TextView>(R.id.lightid_message).text = builder.toString()
     }
 
@@ -90,9 +89,20 @@ class MainActivity: Activity() {
                     val lightId = ids[0]
                     it.send(lightId)
                     runOnUiThread {  updateLightIDMessage(lightId) }
+
+                    if (lightId.isReady && !opened) {
+                        opened = true
+                        val intent = Intent(this, ARActivity::class.java)
+                        intent.putExtra("light-id", lightId)
+                        startActivity(intent)
+                    }
                 }
             }
         }
+
+        // show the scanner version and UUID
+        updateCommandMessage("UUID > ${LiGScanner.getUUID()}")
+        updateCommandMessage("SDK Version > ${LiGScanner.version}")
     }
 
     override fun onStart() {
@@ -110,6 +120,8 @@ class MainActivity: Activity() {
 
         // clear message
         findViewById<TextView>(R.id.command_msg).text = ""
+
+        opened = false
     }
 
     companion object {

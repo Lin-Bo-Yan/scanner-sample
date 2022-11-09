@@ -52,6 +52,7 @@ public class LiGSurfaceView extends SurfaceView implements SurfaceHolder.Callbac
 
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
+        stopDrawing();
         // need not to implement
     }
 
@@ -114,7 +115,7 @@ public class LiGSurfaceView extends SurfaceView implements SurfaceHolder.Callbac
         readyCyclePaint.setColor(Color.GREEN);
 
         SurfaceHolder holder = getHolder();
-        while (!workThread.isInterrupted()) {
+        while (workThread != null && !workThread.isInterrupted()) {
             try {
                 LightID lightID = queue.take();
 
@@ -122,6 +123,7 @@ public class LiGSurfaceView extends SurfaceView implements SurfaceHolder.Callbac
                     continue;
 
                 Canvas canvas = holder.lockCanvas();
+                if (canvas == null) continue;
 
                 canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
                 canvas.drawLines(areaLinePoints, areaLinePaint);
