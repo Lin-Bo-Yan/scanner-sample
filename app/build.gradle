@@ -25,7 +25,7 @@ android {
 }
 
 dependencies {
-    implementation 'tw.com.lig:scanner:3.0.8'
+    implementation 'tw.com.lig:scanner:3.0.9'
 
     // 3D Viewer
     implementation 'com.google.ar:core:1.30.0'
