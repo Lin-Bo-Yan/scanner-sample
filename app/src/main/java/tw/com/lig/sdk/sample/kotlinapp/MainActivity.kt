@@ -8,6 +8,7 @@ import android.view.WindowManager
 import android.widget.TextView
 import tw.com.lig.sdk.scanner.LiGScanner
 import tw.com.lig.sdk.scanner.LightID
+import tw.com.lig.sdk.scanner.ScannerStatusListener
 
 class MainActivity: Activity() {
 
@@ -41,9 +42,9 @@ class MainActivity: Activity() {
         }
 
         if (id.isReady) {
-            builder.append("Rotation: ${id.rotation.x}, ${id.rotation.y}, ${id.rotation.z}\n")
-            builder.append("Translation: ${id.translation.x}, ${id.translation.y}, ${id.translation.z}\n")
-            builder.append("Position: ${id.position.x}, ${id.position.y}, ${id.position.z}\n")
+            builder.append(String.format("Rotation: [ %.2f %.2f %.2f ]\n", id.rotation.x, id.rotation.y, id.rotation.z))
+            builder.append(String.format("Translation: [ %.2f %.2f %.2f ]\n", id.translation.x, id.translation.y, id.translation.z))
+            builder.append(String.format("Position:  [ %.2f %.2f %.2f ]\n", id.position.x, id.position.y, id.position.z))
         }
 
         findViewById<TextView>(R.id.lightid_message).text = builder.toString()
@@ -63,8 +64,10 @@ class MainActivity: Activity() {
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == PERMISSION_REQ_CODE) {
-            // start scanner
-            LiGScanner.start()
+            if (requestCode == PERMISSION_REQ_CODE && !LiGScanner.isRunning()) {
+                // start scanner
+                LiGScanner.start()
+            }
         }
     }
 
@@ -80,6 +83,10 @@ class MainActivity: Activity() {
         // receive scanner status
         LiGScanner.setStatusListener { status ->
             runOnUiThread { updateCommandMessage("onStatus > $status") }
+            if (status == ScannerStatusListener.Status.AUTHENTICATION_OK) {
+                val token = LiGScanner.getAccessToken()
+                runOnUiThread { updateCommandMessage("Access Token(${token.length}) > $token") }
+            }
         }
 
         // receive scan result
