@@ -4,11 +4,13 @@ import android.Manifest
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.WindowManager
 import android.widget.TextView
 import tw.com.lig.sdk.scanner.LiGScanner
 import tw.com.lig.sdk.scanner.LightID
 import tw.com.lig.sdk.scanner.ScannerStatusListener
+import tw.com.lig.sdk.scanner.Vector3
 
 class MainActivity: Activity() {
 
@@ -94,8 +96,30 @@ class MainActivity: Activity() {
             if (ids.isNotEmpty()) {
                 surfaceView?.let {
                     val lightId = ids[0]
+
+
+//                    val lightId = LightID(
+//                        status = 1,
+//                        coordinateX = 0.41749913f,
+//                        coordinateY = 0.4111436f,
+//                        isDetected = true,
+//                        deviceId = 123456789L,
+//                        detectionTime = 3094,
+//                        decodedTime = 206,
+//                        isReady = true,
+//                        rotation = Vector3(0.50f, -0.20f, -0.10f),
+//                        translation = Vector3(-0.10f, -0.20f, 0.60f),
+//                        position = Vector3(-0.01f, -0.10f, 0.60f)
+//                    )
+
                     it.send(lightId)
-                    runOnUiThread {  updateLightIDMessage(lightId) }
+
+                    runOnUiThread {
+                        updateLightIDMessage(lightId)
+                        Log.d("ddd= 迴轉 ", lightId.rotation.toString())
+                        Log.d("ddd= translation ", lightId.translation.toString())
+                        Log.d("ddd= 位置 ", lightId.position.toString())
+                    }
 
                     if (lightId.isReady && !opened) {
                         opened = true

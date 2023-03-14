@@ -105,7 +105,9 @@ class ARSceneformController(
 
         if (!modelPlaced && sceneView.arFrame?.camera?.trackingState == TrackingState.TRACKING) {
             modelPlaced = true
-            addModelToScene(R.raw.andy, lightId)
+//            addModelToScene(R.raw.andy, lightId)
+//            addModelToScene(R.raw.bugatti, lightId)
+
         }
     }
 }
